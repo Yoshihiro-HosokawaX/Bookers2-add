@@ -21,6 +21,14 @@
         <td>introduction</td>
         <td><%= user.introduction %></td>
       </tr>
+      <tr>
+        <td>
+          フォロー <%= user.followings.count %> 人
+        </td>
+        <td>
+          フォロワー <%= user.followers.count %> 人
+        </td>
+      </tr>
     </tbody>
   </table>
 
@@ -28,6 +36,9 @@
     <%= link_to edit_user_path(user), class: "btn btn-block btn-default" do %>
       <i class="glyphicon glyphicon-wrench"></i>
     <% end %>
+  <% else %>
+    <!-- フォローボタン(部分テンプレート) -->
+    <%= render 'relationships/follow_button', user: user %>
   <% end %>
 </div>
 

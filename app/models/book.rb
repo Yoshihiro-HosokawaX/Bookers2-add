@@ -1,9 +1,11 @@
 class Book < ApplicationRecord
 
-    
+
     belongs_to :user
 
     has_many :users
+
+    has_many :book_comments, dependent: :destroy
 
     has_many :favorites, dependent: :destroy
     def favorited_by?(user)
@@ -12,5 +14,5 @@ class Book < ApplicationRecord
 
     validates :title, length: { minimum: 1 }
     validates :body, length: { in: 1..200 }
-    
+
 end

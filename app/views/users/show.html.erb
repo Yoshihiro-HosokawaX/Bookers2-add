@@ -31,6 +31,38 @@
                     <%= paginate @books, class: "paginate" %>  <!-- kaminariのページング -->
                 </tbody>
             </table>
+
+            <h3>フォロー・フォロワーユーザー一覧</h3>
+            <table>
+                <tr>
+                    <h4>フォローしているユーザー</h4>
+                </tr>
+                <% @user.followings.each do |follow| %>
+                    <tr>
+                        <td>
+                            <%= attachment_image_tag follow, :profile_image, :fill, 40, 40, format: 'jpeg', class: "profile-img", fallback: "no_image.jpg", size:'40x40' %>
+                        </td>
+                        <td>
+                            <%= follow.name %>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
+            <table>
+                <tr>
+                    <h4>フォローされているユーザー</h4>
+                </tr>
+                <% @user.followers.each do |follower| %>
+                    <tr>
+                        <td>
+                            <%= attachment_image_tag follower, :profile_image, :fill, 40, 40, format: 'jpeg', class: "profile-img", fallback: "no_image.jpg", size:'40x40' %>
+                        </td>
+                        <td>
+                            <%= follower.name %>
+                        </td>
+                    </tr>
+                <% end %>
+            </table>
         </div>
     </div>
 </div>

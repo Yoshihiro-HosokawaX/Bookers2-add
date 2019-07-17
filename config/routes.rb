@@ -18,7 +18,10 @@ Rails.application.routes.draw do
 
   resources :books do
     resource :favorites, only: [:create, :destroy]
+    resources :book_comments, only: [:create, :edit, :update, :destroy]
   end
+
+  resources :relationships, only: [:create, :destroy]
 
   get 'home/about' => 'books#about'
 

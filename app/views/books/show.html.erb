@@ -17,7 +17,8 @@
                 <tbody>
                     <tr>
                         <!-- 1:Nの関係から book.userのuser_idを引っ張ってくる -->
-                        <td width="10%"><%= attachment_image_tag @book.user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "profile-img", fallback: "no_image.jpg", size:'40x40' %>
+                        <td width="10%">
+                            <%= attachment_image_tag @book.user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "profile-img", fallback: "no_image.jpg", size:'40x40' %>
                             <br>
                             <!-- ログインしてないユーザーも表示できるように -->
                             <%= link_to @book.user.name, user_path(@book.user) %>
@@ -27,16 +28,16 @@
                         <!-- いいねを表示 -->
                         <td width="15%">
                             <% if @book.favorited_by?(current_user) %>
-                                
+
                                 <%= link_to book_favorites_path(@book), method: :delete do %>
                                     <i class="glyphicon glyphicon-heart" aria-hidden="true" style="color: red;"></i>
                                     <%= @book.favorites.count %><br> いいね
                                 <% end %>
-                                
+
                             <% else %>
                                 <%= link_to book_favorites_path(@book), method: :post do %>
                                     <i class="glyphicon glyphicon-heart-o" aria-hidden="true"></i>
-                                <%= @book.favorites.count %><br> いいね
+                                    <%= @book.favorites.count %><br> いいね
                                 <% end %>
                             <% end %>
                         </td>
@@ -53,6 +54,73 @@
                     </tr>
                 </tbody>
             </table>
+
+            <div>
+                <h2>いいねしたユーザー一覧</h2>
+                <table>
+                    <% @book.favorites.each do |fav_user| %>
+                        <tr>
+                            <td>
+                                <%= attachment_image_tag fav_user.user, :profile_image, :fill, 40, 40, format: 'jpeg', class: "profile-img", fallback: "no_image.jpg", size:'40x40' %>
+                                <br>
+                                <%= fav_user.user.name %>
+                            </td>
+                        </tr>
+                    <% end %>
+                </table>
+            </div>
+
+            <div>
+                <h3><%= @book.book_comments.count %>件コメント</h3>
+            </div>
+            <table>
+                <thead>
+                    <tr align=center>
+                        <td>
+                            時間
+                        </td>
+                        <td>
+                            ユーザー
+                        </td>
+                        <td>
+                            コメント
+                        </td>
+                    <tr>
+                </thead>
+                <tbody>
+                    <% @book.book_comments.each do |book_comment| %>
+                        <tr>
+                            <td width="15%" align=center>
+                                <%= book_comment.created_at.strftime('%Y/%m/%d') %>
+                            </td>
+                            <td width="15%" align=center>
+                                <%= book_comment.user.name %>
+                            </td>
+                            <td width="60%">
+                                <%= book_comment.comment %>
+                            </td>
+
+                            <!-- ログインしているユーザーだけの編集機能 -->
+                            <% if book_comment.user_id == current_user.id %>
+                                <td width="7%">
+                                    <%= link_to "Edit", edit_book_book_comment_path(@book, book_comment) %>
+                                </td>
+                                <td width="8%">
+                                    <%= link_to "Destroy", book_book_comment_path(@book, book_comment), method: :delete, data: { confirm: 'Are you sure?'} %>
+                                </td>
+                            <% end %>
+                        </tr>
+                    <% end %>
+                </tbody>
+            </table>
+
+            <div>
+                <%= form_for [@book, @book_comment] do |f| %>
+                    <h4>コメント記入</h4>
+                    <%= f.text_area :comment %>
+                    <%= f.submit "投稿" %>
+                <% end %>
+            </div>
         </div>
     </div>
 </div>
